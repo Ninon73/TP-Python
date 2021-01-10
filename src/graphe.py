@@ -30,6 +30,47 @@ class Graphe():
             if not (e.e[1] in V.V):
                 raise InvalideArcException("L'arc final n'est pas dans l'ensemble de sommet")
 
+    def get_liste_arc_init(self, v):
+        rtn = []
+        for e in self.E.E:
+            if v==e.e[0]:
+                rtn.append(e)
+        return rtn
+
+    def get_liste_arc_final(self, v):
+        rtn = []
+        for e in self.E.E:
+            if v==e.e[1]:
+                rtn.append(e)
+        return rtn
+
+    def degre_interieur(self, nom_sommet):
+        v = self.V.get(nom_sommet)
+        n = len(self.get_liste_arc_init(v))
+        return n
+
+    def degre_exterieur(self, nom_sommet):
+        v = self.V.get(nom_sommet)
+        n = len(self.get_liste_arc_final(v))
+        return n
+
+    def degre(self, nom_sommet):
+        return self.degre_interieur(nom_sommet) + self.degre_exterieur(nom_sommet)
+
+    def plusCourtChemin(self, sommet1, sommet2):
+        #TODO
+        s1 = self.V.get(sommet1)
+        s2 = self.V.get(sommet2)
+        self._plusCourtCheming(sommet1, sommet2)
+
+    def _plusCourtChemin(self, sommet1, sommet2, Arcs):
+        #TODO
+        self.get_liste_arc_init(sommet1)
+
+        for e in self.E.E:
+            pass
+
+
     @classmethod
     def instantiate_graph_from_input(cls):
         nb_sommet = int(input("Combien y a t-il de sommet ?"))
