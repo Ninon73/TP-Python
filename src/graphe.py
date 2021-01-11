@@ -1,6 +1,8 @@
 from sommet import Sommet, Sommets
 from arc import Arc, Arcs
-from exceptions import ArcInexistantException
+from exceptions import SommetInexistantException
+import copy
+
 
 class Graphe():
     def __init__(self, V=None, E=None):
@@ -25,22 +27,22 @@ class Graphe():
 
         for e in E.E:
             if not (e.e[0] in V.V):
-                raise InvalideArcException("L'arc initial n'est pas dans l'ensemble de sommet")
+                raise SommetInexistantException("Le sommet initial de l'arc n'est pas dans l'ensemble de sommet")
 
             if not (e.e[1] in V.V):
-                raise InvalideArcException("L'arc final n'est pas dans l'ensemble de sommet")
+                raise SommetInexistantException("Le sommet final de l'arc n'est pas dans l'ensemble de sommet")
 
     def get_liste_arc_init(self, v):
         rtn = []
         for e in self.E.E:
-            if v==e.e[0]:
+            if v == e.e[0]:
                 rtn.append(e)
         return rtn
 
     def get_liste_arc_final(self, v):
         rtn = []
         for e in self.E.E:
-            if v==e.e[1]:
+            if v == e.e[1]:
                 rtn.append(e)
         return rtn
 
@@ -58,32 +60,48 @@ class Graphe():
         return self.degre_interieur(nom_sommet) + self.degre_exterieur(nom_sommet)
 
     def plusCourtChemin(self, sommet1, sommet2):
-        #TODO
+        # TODO
         s1 = self.V.get(sommet1)
         s2 = self.V.get(sommet2)
-        self._plusCourtCheming(sommet1, sommet2)
+        all_chemins = list(self._listeChemin(s1, s2, Arcs()))
 
-    def _plusCourtChemin(self, sommet1, sommet2, Arcs):
-        #TODO
-        self.get_liste_arc_init(sommet1)
+        map_arc_val = {arc: arc.val for arc in all_chemins}
+        rtn = min({v[1] for v in map_arc_val.items()})
+        chemin_res = [i[0] for i in map_arc_val.items() if i[1] == rtn]
+        return rtn, chemin_res
 
-        for e in self.E.E:
-            pass
+    def _listeChemin(self, sommet1, sommet2, arcs):
 
+        if sommet1 == sommet2:
+            return arcs
+
+        init_arcs = set(self.get_liste_arc_init(sommet1))
+        init_arcs_non_explore = init_arcs - arcs.E
+        all_res = []
+        for e in init_arcs_non_explore:
+            arcs_cur = copy.deepcopy(arcs)
+            arcs_cur.add(e)
+            res = self._listeChemin(e.e[1], sommet2, arcs_cur)
+            if res is not None:
+                if isinstance(res, list):
+                    all_res.extend(res)
+                else:
+                    all_res.append(res)
+        return all_res
 
     @classmethod
     def instantiate_graph_from_input(cls):
         nb_sommet = int(input("Combien y a t-il de sommet ?"))
         V = Sommets()
         for i in range(nb_sommet):
-            print("{}:".format(i+1))
+            print("{}:".format(i + 1))
             s = Sommet.instantiate_sommet()
             V.add(s)
 
         nb_arc = int(input("Combien y a t-il d'arc ?"))
         E = Arcs()
         for i in range(nb_arc):
-            print("{}:".format(i+1))
+            print("{}:".format(i + 1))
             arc_cur = Arc.instantiate_arc(V)
             E.add(arc_cur)
 
@@ -97,9 +115,9 @@ class Graphe():
 
         with open(file_path) as fp:
             line = fp.readline().rstrip('\n')
-            if (line[0]!="{") or (line[-1]!="}"):
+            if (line[0] != "{") or (line[-1] != "}"):
                 raise Exception("Mauvais format")
-            sommets = line[1:-1].replace(" ","").split(",")
+            sommets = line[1:-1].replace(" ", "").split(",")
 
             for i in sommets:
                 V.add(Sommet(i))
@@ -111,15 +129,15 @@ class Graphe():
                     arc = Arc(V.get(si), V.get(sf), float(val))
                     E.add(arc)
 
-        g = Graphe(V,E)
+        g = Graphe(V, E)
         return g
 
     def __str__(self):
-        rtn = "-"*80
-        rtn+="\nLa représentation du graphe est:\n"
-        rtn+=self.V.__str__()
-        rtn+="\n"
-        rtn+=self.E.__str__()
-        rtn+="-"*80
-        rtn+="\n"
+        rtn = "-" * 80
+        rtn += "\nLa représentation du graphe est:\n"
+        rtn += self.V.__str__()
+        rtn += "\n"
+        rtn += self.E.__str__()
+        rtn += "-" * 80
+        rtn += "\n"
         return rtn

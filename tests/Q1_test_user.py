@@ -1,4 +1,4 @@
-#Q1:
+# Q1:
 # On défini la class Sommet qui est en réalité juste un nom
 # On défini la class Sommets qui est un ensemble de sommet, on s'assure qu'on ne puisse pas créer deux fois le même sommet.
 # On crée une méthode pour qu'un utilisateur puisse instantier un Sommet.
@@ -14,7 +14,9 @@
 # On crée une méthode de classe qui permet à l'utilisateur de créer un graphe comme l'indique la Q1.
 
 import sys
+
 sys.path.append("../src/")
 from graphe import Graphe
+
 graph = Graphe.instantiate_graph_from_input()
 print(graph)

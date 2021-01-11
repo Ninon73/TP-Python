@@ -1,5 +1,6 @@
 from exceptions import SommetInexistantException, SommetExisteDejaException
 
+
 class Sommets():
     def __init__(self, set_sommet=None):
         if set_sommet is None:
@@ -13,7 +14,8 @@ class Sommets():
             raise TypeError("La classe Sommet doit être instantiée avec un set de Sommet")
         for sommet in set_sommet:
             if not isinstance(sommet, Sommet):
-                raise TypeError("L'un des éléments du set pour instantier un objet de la classe Sommets n'est pas de classe Sommet")
+                raise TypeError(
+                    "L'un des éléments du set pour instantier un objet de la classe Sommets n'est pas de classe Sommet")
 
     def get(self, name):
         for v in self.V:
@@ -23,17 +25,17 @@ class Sommets():
 
     def add(self, sommet):
         for v in self.V:
-            if v==sommet:
+            if v == sommet:
                 raise SommetExisteDejaException("Le sommet existe déjà")
         self.V.add(sommet)
 
     def __str__(self):
         rtn = "L'ensemble de Sommet V est: \n{"
         for v in self.V:
-            rtn+=v.__str__()
-            rtn+=", "
-        rtn = rtn[:-2] if len(self.V)>0 else rtn
-        rtn+="}"
+            rtn += v.__str__()
+            rtn += ", "
+        rtn = rtn[:-2] if len(self.V) > 0 else rtn
+        rtn += "}"
         return rtn
 
 

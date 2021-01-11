@@ -1,5 +1,6 @@
 from exceptions import ArcExisteDejaException
 
+
 class Arcs():
     def __init__(self, set_arc=None):
         if set_arc is None:
@@ -13,19 +14,28 @@ class Arcs():
             raise TypeError("La classe arcs ne peut être instantiée que par un set d'arcs")
         for arc in set_arc:
             if not isinstance(arc, Arc):
-                raise TypeError("L'un des éléments du set pour instantier un object de la classe Arcs n'est pas de classe Arc")
+                raise TypeError(
+                    "L'un des éléments du set pour instantier un object de la classe Arcs n'est pas de classe Arc")
 
     def add(self, arc):
         for e in self.E:
-            if e==arc:
+            if e == arc:
+                print(e, arc, e.__hash__(), arc.__hash__())
                 raise ArcExisteDejaException("L'arc existe déjà")
         self.E.add(arc)
+
+    @property
+    def val(self):
+        val = 0
+        for e in self.E:
+            val += e.val
+        return val
 
     def __str__(self):
         rtn = "L'ensemble d'Arcs E est:\n"
         for e in self.E:
-            rtn+=e.__str__()
-            rtn+="\n"
+            rtn += e.__str__()
+            rtn += "\n"
         return rtn
 
 
@@ -35,7 +45,7 @@ class Arc():
         self.val = val
 
     def __eq__(self, arc):
-        return (self.e == arc.e)and(self.val==self.val)
+        return (self.e == arc.e) and (self.val == arc.val)
 
     def __hash__(self):
         return hash((self.e, self.val))
@@ -43,7 +53,7 @@ class Arc():
     @classmethod
     def instantiate_arc(cls, V):
         nom_sommet_i = input("Nom du sommet initial: ")
-        si = V.get(nom_sommet_i) #On récupère l'objet dans la liste de sommet pour créer l'arc
+        si = V.get(nom_sommet_i)  # On récupère l'objet dans la liste de sommet pour créer l'arc
         nom_sommet_f = input("Nom du sommet final: ")
         sf = V.get(nom_sommet_f)
         val = input("Valeur arc: ")
@@ -51,6 +61,5 @@ class Arc():
         return arc
 
     def __str__(self):
-        rtn = ""
         rtn = "{}-{}-{}".format(self.e[0], self.e[1], self.val)
         return rtn
